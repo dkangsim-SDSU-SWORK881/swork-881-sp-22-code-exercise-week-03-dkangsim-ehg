@@ -1,7 +1,7 @@
 ---
 title: "week 03 coding challenge"
-author: "."
-date: ""
+author: "D. Eastern Kang Sim"
+date: "02.09.2022"
 output: html_document
 ---
 
@@ -11,11 +11,13 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 
 
 ```{r load libraries}
-
+library(tidyverse)
+library(usethis)
 ```
 
 
 ```{r load data}
+df.1<- read_csv("Data/LHS_exercise_02042022.csv") #446 obs. 9 variables
 
 ```
 
