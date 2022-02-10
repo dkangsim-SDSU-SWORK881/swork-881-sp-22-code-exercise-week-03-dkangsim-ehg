@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 
 ```{r load libraries}
 library(tidyverse)
+library(tidymodels)
 library(usethis)
 ```
 
@@ -23,7 +24,7 @@ df.1<- read_csv("Data/LHS_exercise_02042022.csv") #446 obs. 9 variables
 
 We want to explore whether higher risk of depression increases alcohol consumtion. 
 
-Based on the Latino Health Survey codebook, the four items of depression (PTSD-4; page 6) need to be reversed.
+Based on the Latino Health Survey code book, the four items of depression (PTSD-4; page 6) need to be reversed.
 
 Your task is to manipulate your data using the `tidyverse`'s `mutate`, `case_when` functions and run a series of logistic regression analyses. Use Google search as needed.
 
@@ -42,7 +43,12 @@ How often did you have a drink containing alcohol in the past year?
 5. Never <- coded as '0'
 
 ```{r data wrangling}
-
+df.2<- df.1%>%
+  mutate(ptsd_mean = rowMeans(across(ptsd1_1:ptsd4_1), na.rm = T), 
+         ptsd_mean_rev= 6-ptsd_mean, 
+         ptsd_mean_rev_std = scale(ptsd_mean_rev),
+         audit_c = case_when(audit1 <=2 ~1, 
+                             TRUE ~ 0))
 ```
 
 
@@ -50,7 +56,11 @@ How often did you have a drink containing alcohol in the past year?
 
 Run logistic regression using `ptsd_mean_rev` adjusting for age, sex, and education; use `tidy` function for output; exponent your results and interpret your result using odds ratio
 ```{r logistic regression 1}
+fit.1<- glm( audit_c~ ptsd_mean_rev+age+ factor(sex)+ factor(education),
+             family = "binomial", 
+             data=df.2)
 
+tidy(fit.1, exponentiate = TRUE)
 ```
 
 Interpretation: 
@@ -58,7 +68,8 @@ Interpretation:
 
 Use `ggfortify`'s `autoplot` function to do model diagnostics
 ```{r}
-
+a<- tidy(fit.1)
+a$div4<- a$estimate/4
 ```
 
 Explain diagnostic plots:
