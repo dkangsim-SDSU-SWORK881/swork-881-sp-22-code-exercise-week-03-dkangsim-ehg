@@ -1,7 +1,7 @@
 ---
 title: "week 03 coding challenge"
 author: "D. Eastern Kang Sim"
-date: "02.09.2022"
+date: "02.09.2022- revised"
 output: html_document
 ---
 
